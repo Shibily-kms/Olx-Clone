@@ -6,20 +6,20 @@ import { useNavigate } from 'react-router-dom';
 
 const Create = () => {
   const navigate = useNavigate()
-  const {firebase} = useContext(FirebaseContext);
-  const {user} = useContext(AuthContext)
+  const { firebase } = useContext(FirebaseContext);
+  const { user } = useContext(AuthContext)
   const [name, setName] = useState('');
   const [category, setCategory] = useState('');
   const [price, setPrice] = useState('');
   const [image, setImage] = useState(null);
 
   const handleSubmit = () => {
-    firebase.storage().ref(`/image/${image.name}`).put(image).then(({ref})=>{
-      ref.getDownloadURL().then((url)=>{
+    firebase.storage().ref(`/image/${image.name}`).put(image).then(({ ref }) => {
+      ref.getDownloadURL().then((url) => {
         firebase.firestore().collection('products').add({
-          name, category,price, url, 
-          userId : user.uid,
-          createAt:new Date().toDateString()
+          name, category, price, url,
+          userId: user.uid,
+          createAt: new Date().toDateString()
         })
         navigate('/')
       })
@@ -34,8 +34,9 @@ const Create = () => {
 
     <Fragment>
       <Header />
-      <card>
+      <card  >
         <div className="centerDiv">
+          <h4 className='text-header'>Add Product</h4>
 
           <label htmlFor="fname">Name</label>
           <br />
@@ -74,7 +75,9 @@ const Create = () => {
           <br />
 
           <br />
-          <img alt="Posts" width="200px" height="200px" src={image ? URL.createObjectURL(image) : ''}></img>
+          {image ?
+            <img alt="Posts" width="200px" height="200px" src={URL.createObjectURL(image)}></img> : ''
+          }
 
           <br />
           <input type="file"
